@@ -1,12 +1,12 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { LibModule } from 'quickstart-lib';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
 import { AppComponent }  from './app.component';
 
 @NgModule({
-  imports:      [ BrowserModule, LibModule],
-  declarations: [ AppComponent ],
-  bootstrap:    [ AppComponent ]
+  imports:      [BrowserModule, MetrikaModule],
+  declarations: [AppComponent],
+  bootstrap:    [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

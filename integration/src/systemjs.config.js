@@ -26,7 +26,7 @@
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'quickstart-lib': 'npm:quickstart-lib/bundles/quickstart-lib.umd.js'
+      'ng-yandex-metrika': 'npm:ng-yandex-metrika/bundles/ng-yandex-metrika.umd.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

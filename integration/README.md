@@ -1,26 +1,59 @@
-# Integration App
+# Angular Yandex Metrika
+Модуль добавляет на страницу счетчик(и) яндекс метрики, доступны все [методы](https://yandex.ru/support/metrika/objects/method-reference.xml) API метрики.
+Для методов, в которые можно передать колбэк, возвращается промис, но колбэки так же работают.
 
-This is a simplified version of https://github.com/angular/quickstart used to test the built lib.
+Модуль сделан с помощью [angular-quickstart-lib](https://github.com/filipesilva/angular-quickstart-lib)
 
-## npm scripts
-
-We've captured many of the most useful commands in npm scripts defined in the `package.json`:
-
-* `npm start` - runs the compiler and a server at the same time, both in "watch mode".
-* `npm run e2e` - compiles the app and run e2e tests.
-* `npm run e2e:aot` - compiles and the app with AOT and run e2e tests.
-
-
-If you need to manually test a library build, follow these steps:
-```
-# starting at the project root, build the library
-npm run build
-# clean the integration app
-npm run preintegration
-cd integration
-npm install
+```sh
+    npm install ng-yandex-metrika --save
 ```
 
-Now the library is installed in your integration app. 
+Чтобы подключить, нужно добавить скрипт в шаблон, либо подключить с помощью загрузчика модулей, и подключить в приложение.
+```typescript
+    import { MetrikaModule } from 'ng-yandex-metrika';
 
-You can use `npm start` to start a live reload server running the app in JIT mode, or `npm run build && npm run serve:aot` to run a static server in AOT mode.
+    @NgModule({
+      imports: [
+        MetrikaModule.forRoot(
+          {id: 35567075, webvisor: true}, // YandexCounterConfig | YandexCounterConfig[]
+          defaultCounter?: number | string // Можно задать ид счетчика, либо порядковый номер в массиве.
+        ),
+      ]
+    })
+```
+
+Если вам нужно, чтобы счетчик работал без javascript, нужно добавить это:
+```html
+<noscript><div><img src="https://mc.yandex.ru/watch/put_your_id_here" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+```
+
+Для отправки javascript события:
+```typescript
+    constructor(private metrika: Metrika) {}
+
+    onClick() {
+      this.metrika.fireEvent('some_event_name');
+    }
+}
+```
+
+Для отправки данных о просмотре страницы:
+```typescript
+    constructor(
+      private metrika: Metrika,
+      private router: Router,
+      location: Location,
+    ) {
+      let prevPath = this.location.path();
+      this.router
+        .events
+        .filter(event => (event instanceof NavigationEnd))
+        .subscribe(() => {
+          const newPath = this.location.path();
+          this.metrika.hit(newPath, {
+            referer: prevPath,
+          });
+          prevPath = newPath;
+        });
+    }
+```

@@ -39,7 +39,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'quickstart-lib': {
+      'ng-yandex-metrika': {
         main: 'index.js',
         defaultExtension: 'js',
         meta: {
