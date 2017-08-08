@@ -1,14 +1,14 @@
 {
   "name": "ng-yandex-metrika",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Yandex metrika for angular 2+ sources",
   "main": "./bundles/ng-yandex-metrika.umd.js",
   "module": "./ng-yandex-metrika.es5.js",
   "es2015": "./ng-yandex-metrika.js",
   "typings": "./ng-yandex-metrika.d.ts",
-  "author": "",
+  "author": "Lyubimov Roman",
   "license": "MIT",
-  "repository": {},
+  "repository": "git@github.com:FriOne/ng-yandex-metrika.git",
   "engines": {
     "node": ">= 6.9.0",
     "npm": ">= 3.0.0"
