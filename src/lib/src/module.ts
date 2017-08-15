@@ -12,19 +12,18 @@ export const DEFAULT_CONFIG: any = {
   ut: 'noindex'
 };
 
-@NgModule({
-  providers: [Metrika],
-})
+@NgModule()
 export class MetrikaModule {
 
   static forRoot(
     configs: YandexCounterConfig | YandexCounterConfig[],
-    defaultCounter?: number | string
+    defaultCounterId?: number | string
   ): ModuleWithProviders {
 
-    const metrika = MetrikaModule.configurateMetrika(configs, defaultCounter);
-    metrika.insertMetrika();
-
+    const metrika = MetrikaModule.configurateMetrika(configs, defaultCounterId);
+    if (metrika) {
+      metrika.insertMetrika();
+    }
     return {
       ngModule: MetrikaModule,
       providers: [{provide: Metrika, useFactory: () => metrika}],
@@ -39,7 +38,7 @@ export class MetrikaModule {
     let defaultCounterId: number | string;
 
     if (!Array.isArray(configs)) {
-      configs = [configs];
+      configs = [configs as YandexCounterConfig];
     }
 
     if (!defaultCounter) {
@@ -68,13 +67,16 @@ export class MetrikaModule {
       if (config.id === defaultCounterId) {
         defaultCounterExists = true;
       }
-      counterConfigs.push({...DEFAULT_CONFIG, ...config});
+      counterConfigs.push({...DEFAULT_CONFIG, ...config} as YandexCounterConfig);
     }
 
     if (!defaultCounterExists) {
       console.warn('You provided wrong counter id as a default:', defaultCounter);
     }
 
-    return new Metrika(counterConfigs, defaultCounterId);
+    const metrika = new Metrika();
+    Metrika.counterConfigs = counterConfigs;
+    Metrika.defaultCounterId = defaultCounterId;
+    return metrika;
   }
 }

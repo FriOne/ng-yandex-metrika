@@ -1,4 +1,5 @@
 .DS_STORE
+.idea
 dist/
 node_modules/
 out-tsc/

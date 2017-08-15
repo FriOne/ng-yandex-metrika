@@ -27,6 +27,9 @@ export interface HitOptions extends CommonOptions {
 @Injectable()
 export class Metrika {
 
+  static counterConfigs: YandexCounterConfig[];
+  static defaultCounterId: number | string;
+
   static getCounterNameById(id: any) {
     return 'yaCounter' + id;
   }
@@ -41,11 +44,8 @@ export class Metrika {
 
   private positionToId: any[];
 
-  constructor(
-    public counterConfigs: YandexCounterConfig[],
-    public defaultCounterId: number | string
-  ) {
-    this.positionToId = counterConfigs.map(config => config.id);
+  constructor() {
+    this.positionToId = Metrika.counterConfigs.map(config => config.id);
   }
 
   insertMetrika() {
@@ -53,7 +53,7 @@ export class Metrika {
     window[name] = window[name] || [];
     window[name].push(() => {
       try {
-        this.counterConfigs.map(config => Metrika.createCounter(config));
+        Metrika.counterConfigs.map(config => Metrika.createCounter(config));
       } catch(e) {}
     });
 
@@ -204,6 +204,8 @@ export class Metrika {
   }
 
   private getCounterIdByPosition(counterPosition: number) {
-    return (counterPosition === undefined) ? this.defaultCounterId : this.positionToId[counterPosition];
+    return (counterPosition === undefined) ?
+      Metrika.defaultCounterId
+      : this.positionToId[counterPosition];
   }
 }
