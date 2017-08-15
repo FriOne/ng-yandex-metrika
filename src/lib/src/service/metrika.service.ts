@@ -1,14 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export interface YandexCounterConfig {
-  id: string | number;
-  clickmap?: boolean;
-  trackLinks?: boolean;
-  accurateTrackBounce?: boolean;
-  webvisor?: boolean;
-  trackHash?: boolean;
-  ut?: string;
-}
+import { YandexCounterConfig } from './metrika.config';
 
 export interface CallbackOptions {
   callback?: () => any;
@@ -27,45 +19,20 @@ export interface HitOptions extends CommonOptions {
 @Injectable()
 export class Metrika {
 
-  static counterConfigs: YandexCounterConfig[];
-  static defaultCounterId: number | string;
-
-  static getCounterNameById(id: any) {
-    return 'yaCounter' + id;
+  static getCounterNameById(id: string | number) {
+    return `yaCounter${id}`;
   }
 
   static getCounterById(id: any) {
     return window[Metrika.getCounterNameById(id)];
   }
 
-  static createCounter(config: YandexCounterConfig) {
-    window[Metrika.getCounterNameById(config.id)] = new Ya.Metrika(config);
-  }
-
   private positionToId: any[];
 
-  constructor() {
-    this.positionToId = Metrika.counterConfigs.map(config => config.id);
-  }
-
-  insertMetrika() {
-    let name = 'yandex_metrika_callbacks';
-    window[name] = window[name] || [];
-    window[name].push(() => {
-      try {
-        Metrika.counterConfigs.map(config => Metrika.createCounter(config));
-      } catch(e) {}
-    });
-
-    let n = document.getElementsByTagName('script')[0],
-      s = document.createElement('script'),
-      f = () => { n.parentNode.insertBefore(s, n); };
-    s.type = 'text/javascript';
-    s.async = true;
-    s.src = 'https://mc.yandex.ru/metrika/watch.js';
-
-    f();
-    return name;
+  constructor(private defaultCounterId: number, private counterConfigs: YandexCounterConfig[]) {
+    this.defaultCounterId = defaultCounterId;
+    this.counterConfigs = counterConfigs;
+    this.positionToId = counterConfigs.map(config => config.id);
   }
 
   async addFileExtension(extensions: string | string[], counterPosition?: number) {
@@ -204,8 +171,8 @@ export class Metrika {
   }
 
   private getCounterIdByPosition(counterPosition: number) {
-    return (counterPosition === undefined) ?
-      Metrika.defaultCounterId
+    return (counterPosition === undefined)
+      ? this.defaultCounterId
       : this.positionToId[counterPosition];
   }
 }

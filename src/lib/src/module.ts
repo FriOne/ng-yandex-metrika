@@ -1,57 +1,76 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 
-import { Metrika, YandexCounterConfig } from './service/metrika.service';
-
-export const DEFAULT_CONFIG: any = {
-  id: null,
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-  webvisor: false,
-  trackHash: true,
-  ut: 'noindex'
-};
+import { Metrika } from './service/metrika.service';
+import { CounterConfig, DEFAULT_COUNTER_ID, YandexCounterConfig } from './service/metrika.config';
 
 @NgModule()
 export class MetrikaModule {
 
   static forRoot(
-    configs: YandexCounterConfig | YandexCounterConfig[],
+    configs: CounterConfig | CounterConfig[],
     defaultCounterId?: number | string
   ): ModuleWithProviders {
 
-    const metrika = MetrikaModule.configurateMetrika(configs, defaultCounterId);
-    if (metrika) {
-      metrika.insertMetrika();
+    if (!(configs instanceof Array)) {
+      configs = [configs as CounterConfig];
     }
+
+    const {defaultId, counterConfigs} = MetrikaModule.configurateMetrika(
+      configs as CounterConfig[],
+      defaultCounterId
+    );
+    const castedConfigProviders = counterConfigs.map((config: YandexCounterConfig) => ({
+      provide: YandexCounterConfig,
+      useValue: config,
+      multi: true,
+    }));
+
     return {
       ngModule: MetrikaModule,
-      providers: [{provide: Metrika, useFactory: () => metrika}],
+      providers: [
+        {
+          provide: DEFAULT_COUNTER_ID,
+          useValue: defaultId,
+        },
+        ...castedConfigProviders,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: (configs: YandexCounterConfig[]) => function() {
+            return MetrikaModule.insertMetrika(configs);
+          },
+          deps: [YandexCounterConfig],
+          multi: true,
+        },
+        {
+          provide: Metrika,
+          useClass: Metrika,
+          deps: [DEFAULT_COUNTER_ID, YandexCounterConfig],
+        }
+      ],
     };
   }
 
   static configurateMetrika(
-    configs: YandexCounterConfig | YandexCounterConfig[],
+    configs: CounterConfig[],
     defaultCounter?: number | string
-  ): Metrika {
+  ): {
+    defaultId:  number | string,
+    counterConfigs: YandexCounterConfig[]
+  } {
     const counterConfigs: YandexCounterConfig[] = [];
-    let defaultCounterId: number | string;
-
-    if (!Array.isArray(configs)) {
-      configs = [configs as YandexCounterConfig];
-    }
+    let defaultId: number | string;
 
     if (!defaultCounter) {
-      defaultCounterId = configs[0].id;
+      defaultId = configs[0].id;
     }
     else if (typeof defaultCounter === 'number' && defaultCounter < configs.length) {
-      defaultCounterId = configs[defaultCounter].id;
+      defaultId = configs[defaultCounter].id;
     }
     else {
-      defaultCounterId = defaultCounter;
+      defaultId = defaultCounter;
     }
 
-    if (!defaultCounterId) {
+    if (!defaultId) {
       console.warn('You provided wrong counter id as a default:', defaultCounter);
       return;
     }
@@ -64,19 +83,46 @@ export class MetrikaModule {
         console.warn('You should provide counter id to use Yandex metrika counter', config);
         continue;
       }
-      if (config.id === defaultCounterId) {
+      if (config.id === defaultId) {
         defaultCounterExists = true;
       }
-      counterConfigs.push({...DEFAULT_CONFIG, ...config} as YandexCounterConfig);
+      counterConfigs.push(Object.assign(new YandexCounterConfig(), config));
     }
 
     if (!defaultCounterExists) {
       console.warn('You provided wrong counter id as a default:', defaultCounter);
     }
+    return {
+      counterConfigs,
+      defaultId,
+    };
+  }
 
-    const metrika = new Metrika();
-    Metrika.counterConfigs = counterConfigs;
-    Metrika.defaultCounterId = defaultCounterId;
-    return metrika;
+  static insertMetrika(counterConfigs: YandexCounterConfig[]) {
+    let name = 'yandex_metrika_callbacks';
+    window[name] = window[name] || [];
+    window[name].push(() => {
+      try {
+        counterConfigs.map((config: YandexCounterConfig) => MetrikaModule.createCounter(config));
+      } catch(e) {}
+    });
+
+    let n = document.getElementsByTagName('script')[0],
+      s = document.createElement('script'),
+      f = () => { n.parentNode.insertBefore(s, n); };
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = 'https://mc.yandex.ru/metrika/watch.js';
+
+    f();
+    return name;
+  }
+
+  static createCounter(config: YandexCounterConfig) {
+    window[MetrikaModule.getCounterNameById(config.id)] = new Ya.Metrika(config);
+  }
+
+  static getCounterNameById(id: string | number) {
+    return `yaCounter${id}`;
   }
 }
