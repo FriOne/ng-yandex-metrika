@@ -10,16 +10,16 @@
 
 Чтобы подключить, нужно добавить скрипт в шаблон, либо подключить с помощью загрузчика модулей, и подключить в приложение.
 ```typescript
-    import { MetrikaModule } from 'ng-yandex-metrika';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
-    @NgModule({
-      imports: [
-        MetrikaModule.forRoot(
-          {id: 35567075, webvisor: true}, // YandexCounterConfig | YandexCounterConfig[]
-          defaultCounter?: number | string // Можно задать ид счетчика, либо порядковый номер в массиве.
-        ),
-      ]
-    })
+@NgModule({
+  imports: [
+    MetrikaModule.forRoot(
+      {id: 35567075, webvisor: true}, // CounterConfig | CounterConfig[]
+      defaultCounter?: number | string // Можно задать ид счетчика, либо порядковый номер в массиве.
+    ),
+  ]
+})
 ```
 
 Если вам нужно, чтобы счетчик работал без javascript, нужно добавить это:
@@ -29,31 +29,30 @@
 
 Для отправки javascript события:
 ```typescript
-    constructor(private metrika: Metrika) {}
+constructor(private metrika: Metrika) {}
 
-    onClick() {
-      this.metrika.fireEvent('some_event_name');
-    }
+onClick() {
+  this.metrika.fireEvent('some_event_name');
 }
 ```
 
 Для отправки данных о просмотре страницы:
 ```typescript
-    constructor(
-      private metrika: Metrika,
-      private router: Router,
-      location: Location,
-    ) {
-      let prevPath = this.location.path();
-      this.router
-        .events
-        .filter(event => (event instanceof NavigationEnd))
-        .subscribe(() => {
-          const newPath = this.location.path();
-          this.metrika.hit(newPath, {
-            referer: prevPath,
-          });
-          prevPath = newPath;
-        });
-    }
+constructor(
+  private metrika: Metrika,
+  private router: Router,
+  location: Location,
+) {
+  let prevPath = this.location.path();
+  this.router
+    .events
+    .filter(event => (event instanceof NavigationEnd))
+    .subscribe(() => {
+      const newPath = this.location.path();
+      this.metrika.hit(newPath, {
+        referer: prevPath,
+      });
+      prevPath = newPath;
+    });
+}
 ```

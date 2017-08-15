@@ -132,6 +132,7 @@ export class Metrika {
       counter.reachGoal(type, options.params, options.callback, options.ctx);
       return promise;
     } catch (error) {
+      console.error('error', error);
       console.warn(`'Event with type [${type}] can\'t be fired because counter is still loading'`)
     }
   }
@@ -160,9 +161,10 @@ export class Metrika {
   private counterIsLoaded(counterPosition?: number): Promise<any> {
     let counter = this.getCounterByPosition(counterPosition);
     if (counter && counter.reachGoal) {
-      Promise.resolve(counter);
+      return Promise.resolve(counter);
+    } else {
+      return Promise.reject(counter);
     }
-    return Promise.reject(counter);
   }
 
   private getCounterByPosition(counterPosition?: number) {

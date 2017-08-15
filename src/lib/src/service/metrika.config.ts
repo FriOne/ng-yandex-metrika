@@ -1,6 +1,7 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export const DEFAULT_COUNTER_ID = new InjectionToken< number | string>('DEFAULT_COUNTER_ID');
+export const DEFAULT_COUNTER_ID = new InjectionToken<number | string>('DEFAULT_COUNTER_ID');
+export const YANDEX_COUNTERS_CONFIGS = new InjectionToken<YandexCounterConfig[]>('YANDEX_COUNTERS_CONFIGS');
 
 export interface CounterConfig {
   id: string | number;
@@ -12,7 +13,6 @@ export interface CounterConfig {
   ut?: string;
 }
 
-@Injectable()
 export class YandexCounterConfig  implements CounterConfig {
   id: string;
   clickmap = true;

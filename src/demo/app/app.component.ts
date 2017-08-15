@@ -8,6 +8,6 @@ import { Metrika } from 'ng-yandex-metrika';
 export class AppComponent {
 
   constructor(private metrika: Metrika) {
-    this.metrika.fireEvent('test');
+    setTimeout(() => this.metrika.fireEvent('test'), 2000);
   }
 }
