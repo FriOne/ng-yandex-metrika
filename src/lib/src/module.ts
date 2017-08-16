@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 
 import { Metrika } from './service/metrika.service';
 import {
@@ -7,9 +7,8 @@ import {
   DEFAULT_COUNTER_ID_AOT,
   YANDEX_COUNTERS_CONFIGS,
   YANDEX_COUNTERS_CONFIGS_AOT,
-  YandexCounterConfig,
 } from './service/metrika.config';
-import { countersFactory, defaultCounterIdFactory, insertMetrika } from './service/config-factories';
+import { appInitializerFactory, countersFactory, defaultCounterIdFactory, } from './service/config-factories';
 
 @NgModule({})
 export class MetrikaModule {
@@ -33,19 +32,19 @@ export class MetrikaModule {
         },
         {
           provide: YANDEX_COUNTERS_CONFIGS,
-          useValue: countersFactory,
+          useFactory: countersFactory,
           deps: [YANDEX_COUNTERS_CONFIGS_AOT],
         },
         {
           provide: APP_INITIALIZER,
-          useFactory: insertMetrika,
+          useFactory: appInitializerFactory,
           deps: [YANDEX_COUNTERS_CONFIGS],
           multi: true,
         },
         {
           provide: Metrika,
           useClass: Metrika,
-          deps: [DEFAULT_COUNTER_ID, YANDEX_COUNTERS_CONFIGS],
+          deps: [Injector],
         }
       ],
     };
