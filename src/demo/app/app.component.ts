@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { Metrika } from 'ng-yandex-metrika';
 
 @Component({

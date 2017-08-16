@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
-import { YandexCounterConfig } from './metrika.config';
+import { DEFAULT_COUNTER_ID, YANDEX_COUNTERS_CONFIGS, YandexCounterConfig } from './metrika.config';
 
 export interface CallbackOptions {
   callback?: () => any;
@@ -27,12 +27,14 @@ export class Metrika {
     return window[Metrika.getCounterNameById(id)];
   }
 
+  private defaultCounterId: string;
+  private counterConfigs: YandexCounterConfig[];
   private positionToId: any[];
 
-  constructor(private defaultCounterId: number, private counterConfigs: YandexCounterConfig[]) {
-    this.defaultCounterId = defaultCounterId;
-    this.counterConfigs = counterConfigs;
-    this.positionToId = counterConfigs.map(config => config.id);
+  constructor(injector: Injector) {
+    this.defaultCounterId = injector.get<string>(DEFAULT_COUNTER_ID);
+    this.counterConfigs = injector.get<YandexCounterConfig[]>(YANDEX_COUNTERS_CONFIGS);
+    this.positionToId = this.counterConfigs.map(config => config.id);
   }
 
   async addFileExtension(extensions: string | string[], counterPosition?: number) {
