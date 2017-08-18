@@ -24,7 +24,10 @@ const rollupConfig = {
   plugins: [
     nodeResolve({ jsnext: true, module: true }),
     commonjs({
-      include: ['node_modules/rxjs/**']
+      // include: ['node_modules/rxjs/**'],
+      // namedExports: {
+      //   './node_modules/rxjs/Subject.js': ['Subject']
+      // }
     }),
     uglify()
   ]
