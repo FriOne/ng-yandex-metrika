@@ -2,7 +2,7 @@
 Модуль добавляет на страницу счетчик(и) яндекс метрики, доступны все [методы](https://yandex.ru/support/metrika/objects/method-reference.xml) API метрики.
 Для методов, в которые можно передать колбэк, возвращается промис, но колбэки так же работают.
 
-Модуль сделан с помощью [angular-quickstart-lib](https://github.com/filipesilva/angular-quickstart-lib)
+Модуль сделан с помощью [angular-librarian](https://github.com/gonzofish/angular-librarian)
 
 ```sh
     npm install ng-yandex-metrika --save
