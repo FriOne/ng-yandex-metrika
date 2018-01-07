@@ -16,7 +16,8 @@ import { MetrikaModule } from 'ng-yandex-metrika';
   imports: [
     MetrikaModule.forRoot(
       {id: 35567075, webvisor: true}, // CounterConfig | CounterConfig[]
-      defaultCounter?: number | string // Можно задать ид счетчика, либо порядковый номер в массиве.
+      // Можно задать ид счетчика, либо порядковый номер в массиве, необязательный параметрб по умолчанию первый попавшийся.
+      defaultCounter, // number | string
     ),
   ]
 })
