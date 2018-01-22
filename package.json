@@ -1,6 +1,6 @@
 {
   "name": "ng-yandex-metrika",
-  "version": "0.4.1",
+  "version": "2.0.0",
   "description": "Yandex metrika for angular 2+ sources",
   "main": "./bundles/ng-yandex-metrika.umd.js",
   "module": "./ng-yandex-metrika.es5.js",

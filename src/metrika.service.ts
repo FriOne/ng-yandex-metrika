@@ -69,7 +69,7 @@ export class Metrika {
   }
 
   getClientID(counterPosition?: number): string {
-    let counter = this.getCounterByPosition(counterPosition);
+    const counter = this.getCounterByPosition(counterPosition);
     if (counter && counter.reachGoal) {
       return counter.getClientID();
     }
@@ -152,16 +152,18 @@ export class Metrika {
 
   private getCallbackPromise(options: any, resolveWith: any) {
     return new Promise((resolve, reject) => {
-      let optionsCallback = options.callback;
+      const optionsCallback = options.callback;
       options.callback = function() {
-        optionsCallback && optionsCallback.call(this);
+        if (optionsCallback) {
+          optionsCallback.call(this);
+        }
         resolve(resolveWith);
       };
     });
   }
 
   private counterIsLoaded(counterPosition?: number): Promise<any> {
-    let counter = this.getCounterByPosition(counterPosition);
+    const counter = this.getCounterByPosition(counterPosition);
     if (counter && counter.reachGoal) {
       return Promise.resolve(counter);
     } else {
@@ -170,7 +172,7 @@ export class Metrika {
   }
 
   private getCounterByPosition(counterPosition?: number) {
-    let counterId = this.getCounterIdByPosition(counterPosition);
+    const counterId = this.getCounterIdByPosition(counterPosition);
     return Metrika.getCounterById(counterId);
   }
 

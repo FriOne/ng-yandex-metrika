@@ -64,7 +64,7 @@ export function appInitializerFactory(counterConfigs: YandexCounterConfig[]) {
 }
 
 export function insertMetrika(counterConfigs: YandexCounterConfig[]) {
-  const name = 'yandex_metrika_callbacks';
+  const name = 'yandex_metrika_callbacks2';
   window[name] = window[name] || [];
   window[name].push(function() {
     try {
@@ -78,13 +78,19 @@ export function insertMetrika(counterConfigs: YandexCounterConfig[]) {
   const s = document.createElement('script');
   s.type = 'text/javascript';
   s.async = true;
-  s.src = 'https://mc.yandex.ru/metrika/watch.js';
-  n.parentNode.insertBefore(s, n);
+  s.src = 'https://mc.yandex.ru/metrika/tag.js';
+  const insetScriptTag = () => n.parentNode.insertBefore(s, n);
+
+  if ((window as any).opera === '[object Opera]') {
+    document.addEventListener('DOMContentLoaded', insetScriptTag, false);
+  } else {
+    insetScriptTag();
+  }
   return name;
 }
 
 export function createCounter(config: YandexCounterConfig) {
-  window[getCounterNameById(config.id)] = new Ya.Metrika(config);
+  window[getCounterNameById(config.id)] = new Ya.Metrika2(config);
 }
 
 export function getCounterNameById(id: string | number) {
