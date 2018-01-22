@@ -4,6 +4,8 @@
 
 Модуль сделан с помощью [angular-librarian](https://github.com/gonzofish/angular-librarian)
 
+Версия 2 использует АПИ второй метрики.
+
 ```sh
     npm install ng-yandex-metrika --save
 ```
