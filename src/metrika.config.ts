@@ -7,6 +7,7 @@ export const YANDEX_COUNTERS_CONFIGS = new InjectionToken<YandexCounterConfig[]>
 
 export interface CounterConfig {
   id: string | number;
+  params?: any;
   clickmap?: boolean;
   trackLinks?: boolean;
   accurateTrackBounce?: boolean;
@@ -17,6 +18,7 @@ export interface CounterConfig {
 
 export class YandexCounterConfig  implements CounterConfig {
   id: string | number;
+  params: any;
   clickmap = true;
   trackLinks = true;
   accurateTrackBounce = true;
