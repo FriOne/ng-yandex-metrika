@@ -14,6 +14,7 @@ export interface CounterConfig {
   webvisor?: boolean;
   trackHash?: boolean;
   ut?: string;
+  ecommerce?: string;
 }
 
 export class YandexCounterConfig  implements CounterConfig {
@@ -25,4 +26,5 @@ export class YandexCounterConfig  implements CounterConfig {
   webvisor = false;
   trackHash = true;
   ut = 'noindex';
+  ecommerce?: string;
 }
