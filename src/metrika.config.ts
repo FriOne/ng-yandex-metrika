@@ -15,6 +15,7 @@ export interface CounterConfig {
   trackHash?: boolean;
   ut?: string;
   ecommerce?: string;
+  triggerEvent?: boolean;
 }
 
 export class YandexCounterConfig  implements CounterConfig {
@@ -27,4 +28,5 @@ export class YandexCounterConfig  implements CounterConfig {
   trackHash = true;
   ut = 'noindex';
   ecommerce?: string;
+  triggerEvent?: boolean;
 }
