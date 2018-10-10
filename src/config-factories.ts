@@ -78,7 +78,7 @@ export function insertMetrika(counterConfigs: YandexCounterConfig[]) {
   const s = document.createElement('script');
   s.type = 'text/javascript';
   s.async = true;
-  s.src = 'https://mc.yandex.ru/metrika/tag.js';
+  s.src = 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js';
   const insetScriptTag = () => n.parentNode.insertBefore(s, n);
 
   if ((window as any).opera === '[object Opera]') {
