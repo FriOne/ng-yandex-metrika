@@ -1,29 +1,30 @@
 {
-    "angularCompilerOptions": {
-        "strictMetadataEmit": true,
-        "skipTemplateCodegen": true
-    },
-    "compilerOptions": {
-        "baseUrl": "",
-        "declaration": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "lib": ["es2015", "dom"],
-        "mapRoot": "./",
-        "module": "es2015",
-        "moduleResolution": "node",
-        "outDir": "./dist",
-        "sourceMap": true,
-        "target": "es5",
-        "typeRoots": [
-            "./node_modules/@types"
-        ]
-    },
-    "files": [
-        "./src/index.ts",
-        "./src/typings.d.ts"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
     ],
-    "awesomeTypescriptLoaderOptions": {
-        "forkChecker": true
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "ng-yandex-metrika": [
+        "dist/ng-yandex-metrika"
+      ],
+      "ng-yandex-metrika/*": [
+        "dist/ng-yandex-metrika/*"
+      ]
     }
+  }
 }

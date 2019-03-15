@@ -1,61 +1,27 @@
-# Angular Yandex Metrika
-Модуль добавляет на страницу счетчик(и) яндекс метрики, доступны все [методы](https://yandex.ru/support/metrika/objects/method-reference.xml) API метрики.
-Для методов, в которые можно передать колбэк, возвращается промис, но колбэки так же работают.
+# NgYandexMetrikaCli
 
-Модуль сделан с помощью [angular-librarian](https://github.com/gonzofish/angular-librarian)
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
 
-Версия 2 использует АПИ второй метрики.
+## Development server
 
-```sh
-    npm install ng-yandex-metrika --save
-```
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Чтобы подключить, нужно добавить скрипт в шаблон, либо подключить с помощью загрузчика модулей, и подключить в приложение.
-```typescript
-import { MetrikaModule } from 'ng-yandex-metrika';
+## Code scaffolding
 
-@NgModule({
-  imports: [
-    MetrikaModule.forRoot(
-      {id: 35567075, webvisor: true}, // CounterConfig | CounterConfig[]
-      // Можно задать ид счетчика, либо порядковый номер в массиве, необязательный параметрб по умолчанию первый попавшийся.
-      defaultCounter, // number | string
-    ),
-  ]
-})
-```
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Если вам нужно, чтобы счетчик работал без javascript, нужно добавить это:
-```html
-<noscript><div><img src="https://mc.yandex.ru/watch/put_your_id_here" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-```
+## Build
 
-Для отправки javascript события:
-```typescript
-constructor(private metrika: Metrika) {}
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-onClick() {
-  this.metrika.fireEvent('some_event_name');
-}
-```
+## Running unit tests
 
-Для отправки данных о просмотре страницы:
-```typescript
-constructor(
-  private metrika: Metrika,
-  private router: Router,
-  location: Location,
-) {
-  let prevPath = this.location.path();
-  this.router
-    .events
-    .filter(event => (event instanceof NavigationEnd))
-    .subscribe(() => {
-      const newPath = this.location.path();
-      this.metrika.hit(newPath, {
-        referer: prevPath,
-      });
-      prevPath = newPath;
-    });
-}
-```
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
