@@ -100,7 +100,7 @@ export class Metrika {
   async params(params: any, counterPosition?: number): Promise<any> {
     try {
       const counter = await this.counterIsLoaded(counterPosition);
-      counter.userParams(params);
+      counter.params(params);
       return {params, counterPosition};
     } catch (error) {
       console.warn('Counter is still loading');
