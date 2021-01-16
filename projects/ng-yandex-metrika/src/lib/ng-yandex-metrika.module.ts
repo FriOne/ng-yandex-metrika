@@ -13,8 +13,7 @@ import { appInitializerFactory, countersFactory, defaultCounterIdFactory, } from
 
 @NgModule({})
 export class MetrikaModule {
-
-  static forRoot(configs: CounterConfig | CounterConfig[], defaultCounterId?: number | string): ModuleWithProviders {
+  static forRoot(configs: CounterConfig | CounterConfig[], defaultCounterId?: number | string): ModuleWithProviders<MetrikaModule> {
     return {
       ngModule: MetrikaModule,
       providers: [
