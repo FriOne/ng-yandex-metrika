@@ -11,8 +11,8 @@
   "author": "Lyubimov Roman",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^13.1.0",
-    "@angular/compiler": "^13.1.0"
+    "@angular/common": "^15.2.1",
+    "@angular/compiler": "^15.2.1"
   },
   "repository": {
     "url": "git@github.com:FriOne/ng-yandex-metrika.git"
