@@ -24,6 +24,7 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "enableResourceInlining": true,
+    "compilationMode": "partial",
     "enableIvy": false
   },
   "exclude": [
