@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Metrika } from 'ng-yandex-metrika';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ng-yandex-metrika-proj';
+
+  constructor(public metrika: Metrika) {}
+
+  onLinkClick() {
+    this.metrika.fireEvent('click');
+  }
 }
