@@ -98,6 +98,15 @@
               "src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -121,24 +130,34 @@
       }
     },
     "ng-yandex-metrika": {
+      "projectType": "library",
       "root": "projects/ng-yandex-metrika",
       "sourceRoot": "projects/ng-yandex-metrika/src",
-      "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.json",
             "project": "projects/ng-yandex-metrika/ng-package.json"
-          }
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.json"
+            },
+            "development": {
+              "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ng-yandex-metrika/src/test.ts",
             "tsConfig": "projects/ng-yandex-metrika/tsconfig.spec.json",
-            "karmaConfig": "projects/ng-yandex-metrika/karma.conf.js"
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
