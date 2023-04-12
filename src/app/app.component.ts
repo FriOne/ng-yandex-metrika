@@ -12,6 +12,6 @@ export class AppComponent {
   constructor(public metrika: Metrika) {}
 
   onLinkClick() {
-    this.metrika.fireEvent('click');
+    this.metrika.reachGoal('test');
   }
 }

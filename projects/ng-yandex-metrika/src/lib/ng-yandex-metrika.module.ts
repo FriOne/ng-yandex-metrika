@@ -10,8 +10,12 @@ import {
   YANDEX_COUNTERS_CONFIGS_AOT,
 } from './ng-yandex-metrika.config';
 import { appInitializerFactory, countersFactory, defaultCounterIdFactory, } from './ng-yandex-metrika-config-factories';
+import { MetrikaGoalDirective } from './ng-yandex-metrika-goal.directive';
 
-@NgModule({})
+@NgModule({
+  declarations: [MetrikaGoalDirective],
+  exports: [MetrikaGoalDirective],
+})
 export class MetrikaModule {
   static forRoot(configs: CounterConfig | CounterConfig[], defaultCounterId?: number | string): ModuleWithProviders<MetrikaModule> {
     return {
@@ -45,7 +49,7 @@ export class MetrikaModule {
           provide: Metrika,
           useClass: Metrika,
           deps: [Injector, PLATFORM_ID],
-        }
+        },
       ],
     };
   }

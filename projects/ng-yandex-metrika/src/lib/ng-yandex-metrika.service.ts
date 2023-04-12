@@ -128,7 +128,8 @@ export class Metrika {
     }
   }
 
-  async fireEvent(type: string, options: CommonOptions = {}, counterPosition?: number): Promise<any> {
+  fireEvent = this.reachGoal;
+  async reachGoal(type: string, options: CommonOptions = {}, counterPosition?: number): Promise<any> {
     try {
       const counter = await this.counterIsLoaded(counterPosition);
       const promise = this.getCallbackPromise(options, options);

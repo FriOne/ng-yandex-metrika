@@ -28,13 +28,19 @@ import { MetrikaModule } from 'ng-yandex-metrika';
 <noscript><div><img src="https://mc.yandex.ru/watch/put_your_id_here" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 ```
 
-Для отправки javascript события:
+Для отправки javascript цели можно вызвать метод вручную:
 ```typescript
 constructor(private metrika: Metrika) {}
 
 onClick() {
-  this.metrika.fireEvent('some_event_name');
+  this.metrika.reachGoal('a_goal_name');
 }
+```
+
+Или использовать директиву:
+```angular2html
+<!-- eventName по умолчанию click -->
+<button metrikaGoal goalName="test" eventName="mouseover">Click me</button>
 ```
 
 Для отправки данных о просмотре страницы:

@@ -1,6 +1,6 @@
 declare var Ya: any;
 
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 import { CounterConfig, YandexCounterConfig } from './ng-yandex-metrika.config';
 
