@@ -38,7 +38,7 @@ onClick() {
 ```
 
 Или использовать директиву:
-```angular2html
+```html
 <!-- eventName по умолчанию click -->
 <button metrikaGoal goalName="test" eventName="mouseover">Click me</button>
 ```
