@@ -5,11 +5,9 @@ import { Metrika } from './ng-yandex-metrika.service';
 import {
   CounterConfig,
   DEFAULT_COUNTER_ID,
-  DEFAULT_COUNTER_ID_AOT,
   YANDEX_COUNTERS_CONFIGS,
-  YANDEX_COUNTERS_CONFIGS_AOT,
 } from './ng-yandex-metrika.config';
-import { appInitializerFactory, countersFactory, defaultCounterIdFactory, } from './ng-yandex-metrika-config-factories';
+import { appInitializerFactory, createConfigs, defineDefaultId } from './ng-yandex-metrika-config-factories';
 import { MetrikaGoalDirective } from './ng-yandex-metrika-goal.directive';
 
 @NgModule({
@@ -22,22 +20,12 @@ export class MetrikaModule {
       ngModule: MetrikaModule,
       providers: [
         {
-          provide: DEFAULT_COUNTER_ID_AOT,
-          useValue: defaultCounterId,
-        },
-        {
-          provide: YANDEX_COUNTERS_CONFIGS_AOT,
-          useValue: configs,
-        },
-        {
           provide: DEFAULT_COUNTER_ID,
-          useFactory: defaultCounterIdFactory,
-          deps: [YANDEX_COUNTERS_CONFIGS_AOT, DEFAULT_COUNTER_ID_AOT],
+          useValue: defineDefaultId(configs, defaultCounterId),
         },
         {
           provide: YANDEX_COUNTERS_CONFIGS,
-          useFactory: countersFactory,
-          deps: [YANDEX_COUNTERS_CONFIGS_AOT],
+          useValue: createConfigs(configs),
         },
         {
           provide: APP_INITIALIZER,

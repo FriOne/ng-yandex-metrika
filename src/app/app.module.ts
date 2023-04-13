@@ -10,10 +10,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    MetrikaModule.forRoot({
-      id: 45631461,
-      webvisor: true,
-    }),
+    MetrikaModule.forRoot([
+      {id: 45631461, webvisor: true},
+      {id: 93202589},
+    ]),
   ],
   providers: [],
   bootstrap: [AppComponent]

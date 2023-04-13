@@ -9,7 +9,7 @@ export class MetrikaGoalDirective implements AfterViewInit, OnDestroy {
   @Input() goalName: string;
   @Input() eventName = 'click';
   @Input() params: Record<string, any>;
-  @Input() counterId: number;
+  @Input() counterId?: number;
   @Input() callback: () => void;
 
   private removeEventListener: () => void;

@@ -4,10 +4,6 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { CounterConfig, YandexCounterConfig } from './ng-yandex-metrika.config';
 
-export function defaultCounterIdFactory(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number | string) {
-  return defineDefaultId(counterConfigs, defaultCounter);
-}
-
 export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number | string) {
   let configs: CounterConfig[];
   if (counterConfigs instanceof Array) {
@@ -49,10 +45,6 @@ export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[],
   return defaultId;
 }
 
-export function countersFactory(configs: CounterConfig | CounterConfig[]) {
-  return createConfigs(configs);
-}
-
 export function createConfigs(configs: CounterConfig | CounterConfig[]) {
   let counterConfigs: CounterConfig[];
   if (configs instanceof Array) {
@@ -71,7 +63,7 @@ export function appInitializerFactory(counterConfigs: YandexCounterConfig[], pla
   return () => 'none';
 }
 
-export function insertMetrika(counterConfigs: YandexCounterConfig[]) {
+function insertMetrika(counterConfigs: YandexCounterConfig[]) {
   const name = 'yandex_metrika_callbacks2';
   window[name] = window[name] || [];
   window[name].push(() => {
@@ -105,10 +97,10 @@ export function insertMetrika(counterConfigs: YandexCounterConfig[]) {
   return name;
 }
 
-export function createCounter(config: YandexCounterConfig) {
+function createCounter(config: YandexCounterConfig) {
   window[getCounterNameById(config.id)] = new Ya.Metrika2(config);
 }
 
-export function getCounterNameById(id: string | number) {
+function getCounterNameById(id: string | number) {
   return `yaCounter${id}`;
 }
