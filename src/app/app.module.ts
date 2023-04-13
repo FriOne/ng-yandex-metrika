@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
     AppComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     MetrikaModule.forRoot({
       id: 45631461,
       webvisor: true,
