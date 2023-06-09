@@ -163,7 +163,7 @@ export class Metrika {
   }
 
   private counterIsLoaded(counterId?: number): Promise<any> {
-    const counter = counterId ? Metrika.getCounterById(counterId) : this.defaultCounterId;
+    const counter = Metrika.getCounterById(counterId ?? this.defaultCounterId);
     if (counter && counter.reachGoal) {
       return Promise.resolve(counter);
     } else {
