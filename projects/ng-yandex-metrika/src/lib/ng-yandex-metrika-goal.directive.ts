@@ -4,15 +4,16 @@ import { Metrika } from './ng-yandex-metrika.service';
 
 @Directive({
   selector: '[metrikaGoal]',
+  standalone: true,
 })
 export class MetrikaGoalDirective implements AfterViewInit, OnDestroy {
-  @Input() goalName: string;
+  @Input() goalName!: string;
   @Input() eventName = 'click';
-  @Input() params: Record<string, any>;
+  @Input() params!: Record<string, any>;
   @Input() counterId?: number;
-  @Input() callback: () => void;
+  @Input() callback!: () => void;
 
-  private removeEventListener: () => void;
+  private removeEventListener!: () => void;
 
   constructor(
     private metrika: Metrika,
@@ -25,7 +26,7 @@ export class MetrikaGoalDirective implements AfterViewInit, OnDestroy {
       this.removeEventListener = this.renderer.listen(this.el.nativeElement, this.eventName, () => {
         const options = { callback: this.callback, ...this.params };
 
-        this.metrika.reachGoal(this.goalName, options, this.counterId);
+        this.metrika.reachGoal(this.goalName, options, undefined, undefined, this.counterId);
       });
     } catch (err) {
       console.error(err);

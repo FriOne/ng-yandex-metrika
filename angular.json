@@ -4,190 +4,76 @@
   "newProjectRoot": "projects",
   "projects": {
     "ng-yandex-metrika-proj": {
+      "projectType": "application",
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
       "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ng-yandex-metrika-proj/browser",
+            "outputPath": "dist/ng-yandex-metrika-proj",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "scripts": [],
-            "aot": false,
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "server.ts"
+            }
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          },
-          "defaultConfiguration": ""
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "ng-yandex-metrika-proj:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "ng-yandex-metrika-proj:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "ng-yandex-metrika-proj:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/ng-yandex-metrika-proj/server",
-            "main": "src/server.ts",
-            "tsConfig": "src/tsconfig.server.json",
-            "optimization": false,
-            "sourceMap": true,
-            "extractLicenses": false,
-            "vendorChunk": true,
-            "buildOptimizer": false
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
-              "optimization": true,
-              "sourceMap": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "development": {
-              "browserTarget": "ng-yandex-metrika-proj:build:development",
-              "serverTarget": "ng-yandex-metrika-proj:server:development"
-            },
             "production": {
-              "browserTarget": "ng-yandex-metrika-proj:build:production",
-              "serverTarget": "ng-yandex-metrika-proj:server:production"
+              "buildTarget": "ng-yandex-metrika-proj:build:production"
+            },
+            "development": {
+              "buildTarget": "ng-yandex-metrika-proj:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "routes": [
-              "/"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "ng-yandex-metrika-proj:build:production",
-              "serverTarget": "ng-yandex-metrika-proj:server:production"
-            },
-            "development": {
-              "browserTarget": "ng-yandex-metrika-proj:build:development",
-              "serverTarget": "ng-yandex-metrika-proj:server:development"
-            }
-          },
-          "defaultConfiguration": "production"
-        }
-      }
-    },
-    "ng-yandex-metrika-proj-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ng-yandex-metrika-proj:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ng-yandex-metrika-proj:serve:production"
-            }
+            "buildTarget": "ng-yandex-metrika-proj:build"
           }
         }
       }
@@ -197,6 +83,25 @@
       "root": "projects/ng-yandex-metrika",
       "sourceRoot": "projects/ng-yandex-metrika/src",
       "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "flat": true,
+          "inlineStyle": true,
+          "inlineTemplate": true,
+          "standalone": true,
+          "style": "none"
+        },
+        "@schematics/angular:directive": {
+          "flat": true,
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
+        },
+        "@schematics/angular:service": {
+          "flat": true
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -205,23 +110,13 @@
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.json"
+              "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.prod.json"
             },
             "development": {
               "tsConfig": "projects/ng-yandex-metrika/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/ng-yandex-metrika/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
         }
       }
     }

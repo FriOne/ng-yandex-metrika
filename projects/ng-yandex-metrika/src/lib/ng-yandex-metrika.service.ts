@@ -1,173 +1,114 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { DEFAULT_COUNTER_ID, YANDEX_COUNTERS_CONFIGS, YandexCounterConfig } from './ng-yandex-metrika.config';
+import { DEFAULT_COUNTER_ID, YANDEX_COUNTERS_CONFIGS, CounterConfig } from './ng-yandex-metrika.config';
 
-export interface CallbackOptions {
-  callback?: () => void;
-  ctx?: Record<string, any>;
-}
-
-export interface CommonOptions extends CallbackOptions {
-  params?: Record<string, any>;
-  title?: string;
-}
-
-export interface HitOptions extends CommonOptions {
-  referer?: string;
+interface CallbackOptions<CTX> {
+  callback?: (this: CTX) => void;
+  ctx?: CTX | undefined;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class Metrika {
-  private defaultCounterId: string;
-  private counterConfigs: YandexCounterConfig[];
-
-  static getCounterNameById(id: string | number) {
-    return `yaCounter${id}`;
-  }
-
-  static getCounterById(id: any) {
-    return window[Metrika.getCounterNameById(id)];
-  }
+  private defaultCounterId: number;
+  private counterConfigs: CounterConfig[];
 
   constructor(injector: Injector) {
-    this.defaultCounterId = injector.get<string>(DEFAULT_COUNTER_ID);
-    this.counterConfigs = injector.get<YandexCounterConfig[]>(YANDEX_COUNTERS_CONFIGS);
+    this.defaultCounterId = injector.get<number>(DEFAULT_COUNTER_ID);
+    this.counterConfigs = injector.get<CounterConfig[]>(YANDEX_COUNTERS_CONFIGS);
   }
 
-  async addFileExtension(extensions: string | string[], counterId?: number) {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      counter.addFileExtension(extensions);
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  addFileExtension(extensions: string | string[], counterId?: number) {
+    ym(counterId ?? this.defaultCounterId, 'addFileExtension', extensions);
   }
 
-  async extLink(url: string, options: CommonOptions = {}, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      const promise = this.getCallbackPromise(options, url);
-      counter.extLink(url, options);
-      return promise;
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  extLink<CTX>(url: string, options: ym.ExtLinkOptions<CTX> = {}, counterId?: number) {
+    const promise = this.getCallbackPromise(options);
+
+    ym(counterId ?? this.defaultCounterId, 'extLink', url, options);
+
+    return promise;
   }
 
-  async file(url: string, options: HitOptions = {}, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      const promise = this.getCallbackPromise(options, url);
-      counter.file(url, options);
-      return promise;
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  file<CTX>(url: string, options: ym.FileOptions<CTX> = {}, counterId?: number) {
+    const promise = this.getCallbackPromise(options);
+
+    ym(counterId ?? this.defaultCounterId, 'file', url, options);
+
+    return promise;
   }
 
-  getClientID(counterId?: number): string {
-    const counter = counterId ? Metrika.getCounterById(counterId) : this.defaultCounterId;
-    if (counter && counter.reachGoal) {
-      return counter.getClientID();
-    }
-    console.warn('Counter is still loading');
+  getClientID(counterId?: number) {
+    return new Promise((resolve) => {
+      ym(counterId ?? this.defaultCounterId, 'getClientID', resolve);
+    });
   }
 
-  async setUserID(userId: string, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      counter.setUserID(userId);
-      return {userId, counterId};
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  setUserID(userId: string, counterId?: number) {
+    ym(counterId ?? this.defaultCounterId, 'setUserID', userId);
   }
 
-  async userParams(params: any, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      counter.userParams(params);
-      return {params, counterId};
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  userParams(parameters: ym.UserParameters, counterId?: number) {
+    ym(counterId ?? this.defaultCounterId, 'userParams', parameters);
   }
 
-  async params(params: any, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      counter.params(params);
-      return {params, counterId};
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  params(parameters: ym.VisitParameters | ym.VisitParameters[], counterId?: number) {
+    ym(counterId ?? this.defaultCounterId, 'params', parameters);
   }
 
-  async replacePhones(counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      counter.replacePhones();
-      return {counterId};
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  replacePhones(counterId?: number) {
+    ym(counterId ?? this.defaultCounterId, 'replacePhones');
   }
 
-  async notBounce(options: CallbackOptions = {}, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      const promise = this.getCallbackPromise(options, options);
-      counter.notBounce(options);
-      return promise;
-    } catch (error) {
-      console.warn('Counter is still loading');
-    }
+  async notBounce<CTX>(options: ym.NotBounceOptions<CTX>, counterId?: number) {
+    const promise = this.getCallbackPromise(options);
+
+    ym(counterId ?? this.defaultCounterId, 'notBounce');
+
+    return promise;
   }
 
   fireEvent = this.reachGoal;
-  async reachGoal(type: string, options: CommonOptions = {}, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      const promise = this.getCallbackPromise(options, options);
-      counter.reachGoal(type, options.params, options.callback, options.ctx);
-      return promise;
-    } catch (error) {
-      console.error('error', error);
-      console.warn(`'Event with type [${type}] can\'t be fired because counter is still loading'`)
-    }
+  reachGoal<CTX>(
+    target: string,
+    params: ym.VisitParameters | undefined = undefined,
+    callback: (this: CTX) => void = () => {},
+    ctx: CTX | undefined = undefined,
+    counterId?: number
+  ) {
+    const options = { callback, ctx };
+    const promise = this.getCallbackPromise(options);
+
+    ym(
+      counterId ?? this.defaultCounterId,
+      'reachGoal',
+      target,
+      params,
+      options.callback,
+      options.ctx
+    );
+
+    return promise;
   }
 
-  async hit(url: string, options: HitOptions = {}, counterId?: number): Promise<any> {
-    try {
-      const counter = await this.counterIsLoaded(counterId);
-      const promise = this.getCallbackPromise(options, options);
-      counter.hit(url, options);
-      return promise;
-    } catch (error) {
-      console.warn(`'Hit for page [${url}] can\'t be fired because counter is still loading'`)
-    }
+  hit<CTX>(url: string, options: ym.HitOptions<CTX> = {}, counterId?: number) {
+    const promise = this.getCallbackPromise(options);
+
+    ym(counterId ?? this.defaultCounterId, 'hit', url, options);
+
+    return promise;
   }
 
-  private getCallbackPromise(options: any, resolveWith: any) {
+  private getCallbackPromise<CTX>(options: CallbackOptions<CTX>) {
     return new Promise((resolve) => {
       const optionsCallback = options.callback;
       options.callback = function() {
         if (optionsCallback) {
           optionsCallback.call(this);
         }
-        resolve(resolveWith);
+        resolve(this);
       };
     });
-  }
-
-  private counterIsLoaded(counterId?: number): Promise<any> {
-    const counter = Metrika.getCounterById(counterId ?? this.defaultCounterId);
-    if (counter && counter.reachGoal) {
-      return Promise.resolve(counter);
-    } else {
-      return Promise.reject(counter);
-    }
   }
 }

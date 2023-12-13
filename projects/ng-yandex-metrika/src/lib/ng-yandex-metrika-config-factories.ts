@@ -1,21 +1,19 @@
-declare var Ya: any;
-
 import { isPlatformBrowser } from '@angular/common';
 
-import { CounterConfig, YandexCounterConfig } from './ng-yandex-metrika.config';
+import { CounterConfig } from './ng-yandex-metrika.config';
 
-export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number | string) {
+export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number) {
   let configs: CounterConfig[];
   if (counterConfigs instanceof Array) {
     configs = counterConfigs;
   } else {
     configs = [counterConfigs as CounterConfig];
   }
-  let defaultId: number | string;
+  let defaultId: number;
 
   if (!defaultCounter) {
     defaultId = configs[0].id;
-  } else if (typeof defaultCounter === 'number' && defaultCounter < configs.length) {
+  } else if (defaultCounter < configs.length) {
     defaultId = configs[defaultCounter].id;
   } else {
     defaultId = defaultCounter;
@@ -45,17 +43,7 @@ export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[],
   return defaultId;
 }
 
-export function createConfigs(configs: CounterConfig | CounterConfig[]) {
-  let counterConfigs: CounterConfig[];
-  if (configs instanceof Array) {
-    counterConfigs = configs;
-  } else {
-    counterConfigs = [configs as CounterConfig];
-  }
-  return counterConfigs.map((config: CounterConfig) => Object.assign(new YandexCounterConfig(), config));
-}
-
-export function appInitializerFactory(counterConfigs: YandexCounterConfig[], platformId: any) {
+export function appInitializerFactory(counterConfigs: CounterConfig[], platformId: Object) {
   if (isPlatformBrowser(platformId)) {
     return insertMetrika.bind(null, counterConfigs);
   }
@@ -63,44 +51,20 @@ export function appInitializerFactory(counterConfigs: YandexCounterConfig[], pla
   return () => 'none';
 }
 
-function insertMetrika(counterConfigs: YandexCounterConfig[]) {
-  const name = 'yandex_metrika_callbacks2';
-  window[name] = window[name] || [];
-  window[name].push(() => {
-    try {
-      for (const config of counterConfigs) {
-        createCounter(config);
-      }
-    } catch (e) {}
-  });
+function insertMetrika(counterConfigs: CounterConfig[]) {
+  window.ym = window.ym || function() {
+    (window.ym.a = window.ym.a || []).push(arguments)
+  };
+  window.ym.l = new Date().getTime();
 
-  const n = document.getElementsByTagName('script')[0];
-  const s = document.createElement('script');
-  s.type = 'text/javascript';
-  s.async = true;
+  const lastScript = document.getElementsByTagName('script')[0];
+  const metrikaScript = document.createElement('script');
+  metrikaScript.type = 'text/javascript';
+  metrikaScript.src = 'https://mc.yandex.ru/metrika/tag.js';
+  metrikaScript.async = true;
+  lastScript.parentNode!.insertBefore(metrikaScript, lastScript);
 
-  const alternative = counterConfigs.find(config => config.alternative);
-
-  if (alternative) {
-    s.src = 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js';
-  } else {
-    s.src = 'https://mc.yandex.ru/metrika/tag.js';
+  for (const { id, ...counterConfig } of counterConfigs) {
+    window.ym(id, 'init', counterConfig);
   }
-
-  const insetScriptTag = () => n.parentNode.insertBefore(s, n);
-
-  if ((window as any).opera === '[object Opera]') {
-    document.addEventListener('DOMContentLoaded', insetScriptTag, false);
-  } else {
-    insetScriptTag();
-  }
-  return name;
-}
-
-function createCounter(config: YandexCounterConfig) {
-  window[getCounterNameById(config.id)] = new Ya.Metrika2(config);
-}
-
-function getCounterNameById(id: string | number) {
-  return `yaCounter${id}`;
 }
