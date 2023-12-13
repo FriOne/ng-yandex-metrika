@@ -14,7 +14,10 @@ export const appConfig: ApplicationConfig = {
       MetrikaModule.forRoot([
         { id: METRIKA_ID_1, webvisor: true },
         { id: METRIKA_ID_2 },
-      ])
+      ], {
+        defaultCounter: 1,
+        alternativeUrl: 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js'
+      })
     ),
   ]
 };

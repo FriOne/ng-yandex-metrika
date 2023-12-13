@@ -8,3 +8,4 @@ export interface CounterConfig extends ym.InitParameters {
 
 export const DEFAULT_COUNTER_ID = new InjectionToken<number>('DEFAULT_COUNTER_ID');
 export const YANDEX_COUNTERS_CONFIGS = new InjectionToken<CounterConfig[]>('YANDEX_COUNTERS_CONFIGS');
+export const ALTERNATIVE_URL = new InjectionToken<string>('ALTERNATIVE_URL');

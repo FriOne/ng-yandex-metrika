@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 
-import { CounterConfig } from './ng-yandex-metrika.config';
+import { ALTERNATIVE_URL, CounterConfig } from './ng-yandex-metrika.config';
 
 export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number) {
   let configs: CounterConfig[];
@@ -43,15 +43,15 @@ export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[],
   return defaultId;
 }
 
-export function appInitializerFactory(counterConfigs: CounterConfig[], platformId: Object) {
+export function appInitializerFactory(counterConfigs: CounterConfig[], platformId: Object, alternativeUrl?: string) {
   if (isPlatformBrowser(platformId)) {
-    return insertMetrika.bind(null, counterConfigs);
+    return insertMetrika.bind(null, counterConfigs, alternativeUrl);
   }
 
   return () => 'none';
 }
 
-function insertMetrika(counterConfigs: CounterConfig[]) {
+function insertMetrika(counterConfigs: CounterConfig[], alternativeUrl?: string) {
   window.ym = window.ym || function() {
     (window.ym.a = window.ym.a || []).push(arguments)
   };
@@ -60,7 +60,7 @@ function insertMetrika(counterConfigs: CounterConfig[]) {
   const lastScript = document.getElementsByTagName('script')[0];
   const metrikaScript = document.createElement('script');
   metrikaScript.type = 'text/javascript';
-  metrikaScript.src = 'https://mc.yandex.ru/metrika/tag.js';
+  metrikaScript.src = alternativeUrl ?? 'https://mc.yandex.ru/metrika/tag.js';
   metrikaScript.async = true;
   lastScript.parentNode!.insertBefore(metrikaScript, lastScript);
 

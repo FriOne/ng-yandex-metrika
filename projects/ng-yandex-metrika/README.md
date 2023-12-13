@@ -13,9 +13,13 @@ import { MetrikaModule } from 'ng-yandex-metrika';
 @NgModule({
   imports: [
     MetrikaModule.forRoot(
-      {id: 35567075, webvisor: true}, // CounterConfig | CounterConfig[]
-      // Можно задать ид счетчика, либо порядковый номер в массиве, необязательный параметр, по умолчанию первый попавшийся.
-      defaultCounter, // number | string
+      { id: 35567075, webvisor: true }, // CounterConfig | CounterConfig[]
+      {
+        // Можно задать ID счетчика, либо порядковый номер в массиве, необязательный параметр, по умолчанию первый
+        defaultCounter,
+        // Для загрузки метрики с другого источника
+        alternativeUrl: 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js',
+      },
     ),
   ]
 })
