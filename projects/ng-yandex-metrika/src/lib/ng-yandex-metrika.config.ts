@@ -1,8 +1,8 @@
-/// <reference path="../../../../node_modules/@types/yandex-metrika-tag/index.d.ts" />
-
 import { InjectionToken } from '@angular/core';
 
-export interface CounterConfig extends ym.InitParameters {
+import { InitParameters } from './yandex-mterika-tag';
+
+export interface CounterConfig extends InitParameters {
   id: number;
 }
 

@@ -1,11 +1,15 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { DEFAULT_COUNTER_ID, YANDEX_COUNTERS_CONFIGS, CounterConfig } from './ng-yandex-metrika.config';
-
-interface CallbackOptions<CTX> {
-  callback?: (this: CTX) => void;
-  ctx?: CTX | undefined;
-}
+import {
+  CallbackOptions,
+  ExtLinkOptions,
+  FileOptions,
+  HitOptions,
+  NotBounceOptions,
+  UserParameters,
+  VisitParameters
+} from './yandex-mterika-tag';
 
 @Injectable({
   providedIn: 'root'
@@ -20,51 +24,51 @@ export class Metrika {
   }
 
   addFileExtension(extensions: string | string[], counterId?: number) {
-    ym(counterId ?? this.defaultCounterId, 'addFileExtension', extensions);
+    window.ym(counterId ?? this.defaultCounterId, 'addFileExtension', extensions);
   }
 
-  extLink<CTX>(url: string, options: ym.ExtLinkOptions<CTX> = {}, counterId?: number) {
+  extLink<CTX>(url: string, options: ExtLinkOptions<CTX> = {}, counterId?: number) {
     const promise = this.getCallbackPromise(options);
 
-    ym(counterId ?? this.defaultCounterId, 'extLink', url, options);
+    window.ym(counterId ?? this.defaultCounterId, 'extLink', url, options);
 
     return promise;
   }
 
-  file<CTX>(url: string, options: ym.FileOptions<CTX> = {}, counterId?: number) {
+  file<CTX>(url: string, options: FileOptions<CTX> = {}, counterId?: number) {
     const promise = this.getCallbackPromise(options);
 
-    ym(counterId ?? this.defaultCounterId, 'file', url, options);
+    window.ym(counterId ?? this.defaultCounterId, 'file', url, options);
 
     return promise;
   }
 
   getClientID(counterId?: number) {
     return new Promise((resolve) => {
-      ym(counterId ?? this.defaultCounterId, 'getClientID', resolve);
+      window.ym(counterId ?? this.defaultCounterId, 'getClientID', resolve);
     });
   }
 
   setUserID(userId: string, counterId?: number) {
-    ym(counterId ?? this.defaultCounterId, 'setUserID', userId);
+    window.ym(counterId ?? this.defaultCounterId, 'setUserID', userId);
   }
 
-  userParams(parameters: ym.UserParameters, counterId?: number) {
-    ym(counterId ?? this.defaultCounterId, 'userParams', parameters);
+  userParams(parameters: UserParameters, counterId?: number) {
+    window.ym(counterId ?? this.defaultCounterId, 'userParams', parameters);
   }
 
-  params(parameters: ym.VisitParameters | ym.VisitParameters[], counterId?: number) {
-    ym(counterId ?? this.defaultCounterId, 'params', parameters);
+  params(parameters: VisitParameters | VisitParameters[], counterId?: number) {
+    window.ym(counterId ?? this.defaultCounterId, 'params', parameters);
   }
 
   replacePhones(counterId?: number) {
-    ym(counterId ?? this.defaultCounterId, 'replacePhones');
+    window.ym(counterId ?? this.defaultCounterId, 'replacePhones');
   }
 
-  async notBounce<CTX>(options: ym.NotBounceOptions<CTX>, counterId?: number) {
+  async notBounce<CTX>(options: NotBounceOptions<CTX>, counterId?: number) {
     const promise = this.getCallbackPromise(options);
 
-    ym(counterId ?? this.defaultCounterId, 'notBounce');
+    window.ym(counterId ?? this.defaultCounterId, 'notBounce');
 
     return promise;
   }
@@ -72,7 +76,7 @@ export class Metrika {
   fireEvent = this.reachGoal;
   reachGoal<CTX>(
     target: string,
-    params: ym.VisitParameters | undefined = undefined,
+    params: VisitParameters | undefined = undefined,
     callback: (this: CTX) => void = () => {},
     ctx: CTX | undefined = undefined,
     counterId?: number
@@ -80,7 +84,7 @@ export class Metrika {
     const options = { callback, ctx };
     const promise = this.getCallbackPromise(options);
 
-    ym(
+    window.ym(
       counterId ?? this.defaultCounterId,
       'reachGoal',
       target,
@@ -92,10 +96,10 @@ export class Metrika {
     return promise;
   }
 
-  hit<CTX>(url: string, options: ym.HitOptions<CTX> = {}, counterId?: number) {
+  hit<CTX>(url: string, options: HitOptions<CTX> = {}, counterId?: number) {
     const promise = this.getCallbackPromise(options);
 
-    ym(counterId ?? this.defaultCounterId, 'hit', url, options);
+    window.ym(counterId ?? this.defaultCounterId, 'hit', url, options);
 
     return promise;
   }

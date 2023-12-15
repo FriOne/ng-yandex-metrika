@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 
-import { ALTERNATIVE_URL, CounterConfig } from './ng-yandex-metrika.config';
+import { CounterConfig } from './ng-yandex-metrika.config';
 
 export function defineDefaultId(counterConfigs: CounterConfig | CounterConfig[], defaultCounter?: number) {
   let configs: CounterConfig[];
