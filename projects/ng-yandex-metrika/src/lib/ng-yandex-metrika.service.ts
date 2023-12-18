@@ -68,7 +68,7 @@ export class Metrika {
   async notBounce<CTX>(options: NotBounceOptions<CTX>, counterId?: number) {
     const promise = this.getCallbackPromise(options);
 
-    window.ym(counterId ?? this.defaultCounterId, 'notBounce');
+    window.ym(counterId ?? this.defaultCounterId, 'notBounce', options);
 
     return promise;
   }
