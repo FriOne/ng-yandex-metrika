@@ -29,7 +29,7 @@ export class MetrikaModule {
         },
         {
           provide: YANDEX_COUNTERS_CONFIGS,
-          useValue: configs,
+          useValue: Array.isArray(configs) ? configs : [configs],
         },
         {
           provide: ALTERNATIVE_URL,
